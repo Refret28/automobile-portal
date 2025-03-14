@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирование парковочного места</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main_page.css}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Автомобильный портал</h1>
+            <div class="hamburger-container">
+                <button class="hamburger" onclick="toggleSidebar()">
+                    <div class="middle"></div>
+                </button>
+            </div>
+        </div>
+    </header>   
+    
+    <input type="hidden" id="user_id" name="user_id" value="{{ user_id }}"> 
+
+    <div id="sidebar" class="sidebar">
+        <span class="close-btn" onclick="closeSidebar()">&times;</span>
+
+        <h1>Добро пожаловать, <span th:text="${username}"></span></h1>
+        <p th:if="${user_id != null}">
+            <a th:href="@{/user_acc/{id}(id=${user_id})}">Перейти в личный кабинет</a>
+        </p>        
+    </div>
+
+    <script type="text/javascript" th:src="@{/js/main.js}" defer></script>
+</body>
+</html>

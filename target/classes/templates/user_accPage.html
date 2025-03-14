@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/usr_acc_page.css}">
+</head>
+<body>
+    <header>
+        <h1>Личный кабинет</h1>
+    </header>
+    <div class="container">
+        <h2>Добро пожаловать, <span th:text="${username}"></span>!</h2>
+        
+        <form th:action="@{/user_acc/{userId}/upload(userId=${userId})}" method="post" enctype="multipart/form-data">
+            <center><div class="avatar-container">
+                <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;" onchange="this.form.submit()">
+                <label for="avatarInput" class="avatar-label">
+                    <img th:src="@{${avatarFilename}}" alt="Аватар" class="avatar">
+                    <div class="overlay">Изменить</div>
+                </label>
+            </div></center>
+        </form>
+
+             
+        <div class="user-info">
+            <h3>Ваша информация:</h3>
+            <p><strong>Имя пользователя:</strong> <span th:text="${username}"></span></p>
+            <p><strong>Дата регистрации:</strong> <span th:text="${created_at}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${email}"></span></p>
+            <p><strong>Телефон:</strong> <span th:text="${phone}"></span></p>
+            <p><strong>Количество посещений:</strong> <span th:text="${visitCount}"></span></p>
+            <p><strong>Текущая дата и время:</strong> <span th:text="${serverTime}"></span></p>
+        </div>        
+        
+        <a th:href="@{/main(user_id=${user_id})}" class="back-link">Вернуться на главную</a>
+    </div>
+</body>
+</html>

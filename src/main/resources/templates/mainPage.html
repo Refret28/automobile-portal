@@ -27,6 +27,7 @@
         <h1>Добро пожаловать, <span th:text="${username}"></span></h1>
         <p th:if="${user_id != null}">
             <a th:href="@{/user_acc/{id}(id=${user_id})}">Перейти в личный кабинет</a>
+            <p><a th:href="@{/logout}" class="logout-btn">Выйти</a></p>
         </p>        
     </div>
 

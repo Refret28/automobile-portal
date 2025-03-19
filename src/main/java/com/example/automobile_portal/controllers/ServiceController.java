@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +21,7 @@ import org.springframework.ui.Model;
 import com.example.automobile_portal.models.User;
 import com.example.automobile_portal.services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -34,6 +37,15 @@ public class ServiceController {
     public String getLoginPage(Model model) {
         model.addAttribute("user", new User());
         return "loginPage";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                request.getSession().invalidate();
+            }
+            return "redirect:/login";
     }
 
     @GetMapping("/main")

@@ -158,7 +158,6 @@ input[type="datetime-local"] {
     background-color: #45a049;
 }
 
-
 .sidebar {
     position: fixed;
     top: 0;
@@ -361,4 +360,11 @@ input[type="datetime-local"] {
 
 .modal-btn:hover {
     background-color: #45a049;
+}
+
+.logout-btn{
+    position: fixed;
+    bottom: 20px; 
+    left: 50%;
+    transform: translateX(-50%); 
 }

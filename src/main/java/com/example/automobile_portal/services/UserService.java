@@ -34,7 +34,7 @@ public class UserService{
         return userRepository.findAll(); 
     } 
 
-    public User getUserById (Integer id) { 
+    public User getUserById(Integer id) { 
         Optional<User> OptionalUser = userRepository.findById(id); 
         if (OptionalUser.isPresent()) { 
             return OptionalUser.get(); 

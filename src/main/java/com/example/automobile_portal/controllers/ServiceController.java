@@ -6,9 +6,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ui.Model;
 
+import com.example.automobile_portal.models.Car;
+import com.example.automobile_portal.models.FavoriteCar;
+import com.example.automobile_portal.models.News;
 import com.example.automobile_portal.models.User;
+import com.example.automobile_portal.services.CarService;
+import com.example.automobile_portal.services.FavoriteCarService;
+import com.example.automobile_portal.services.NewsService;
 import com.example.automobile_portal.services.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +38,15 @@ public class ServiceController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private NewsService newsService;
+
+    @Autowired
+    private CarService carService;
+
+    @Autowired
+    private FavoriteCarService favoriteCarService;
 
     private final String UPLOAD_DIR = "src/main/resources/static/uploads/avatars/";
 
@@ -55,9 +72,49 @@ public class ServiceController {
             return "redirect:/login?error=user_not_found";
         }
 
+        List<News> newsList = newsService.getAllNews();
+        List<Car> carList = carService.getAllCars();
+
         model.addAttribute("username", dbUser.getUsername());
         model.addAttribute("user_id", userId);
+        model.addAttribute("newsList", newsList);
+        model.addAttribute("carList", carList);
+        
         return "mainPage";
+    }    
+
+    @PostMapping("/add-to-favorites")
+    @ResponseBody
+    public ResponseEntity<String> addToFavorites(@RequestParam Integer userId, @RequestParam Long carId) {
+        User user = userService.getUserById(userId);
+        Car car = carService.getCarById(carId); 
+    
+        if (user != null && car != null) {
+            if (!favoriteCarService.isExistCar(userId, car.getModel())) {
+                FavoriteCar favoriteCar = new FavoriteCar();
+                favoriteCar.setUser(user);
+                favoriteCar.setCarModel(car.getModel());
+                favoriteCar.setCarDetails(car.getDetails());
+                favoriteCar.setImageUrl(car.getImageUrl());
+                favoriteCarService.addFavoriteCar(favoriteCar);
+                return ResponseEntity.ok("Автомобиль добавлен в избранное!");
+            } else {
+                return ResponseEntity.badRequest().body("Автомобиль уже добавлен в избранное!");
+            }
+        }
+        return ResponseEntity.badRequest().body("Пользователь или автомобиль не найден.");
+    }    
+
+    @PostMapping("/remove-favorite")
+    @ResponseBody
+    public ResponseEntity<String> removeFavorite(@RequestParam(required = true) Long userId, 
+                                                 @RequestParam(required = true) Long carId) {
+        if (userId == null || carId == null) {
+            return ResponseEntity.badRequest().body("Ошибка: userId или carId не переданы.");
+        }
+    
+        favoriteCarService.delete(carId);
+        return ResponseEntity.ok("Автомобиль удален из избранного!");
     }    
 
     @GetMapping("/register")
@@ -84,6 +141,9 @@ public class ServiceController {
         if (user == null) {
             return "redirect:/login?error=user_not_found";
         }
+
+        List<FavoriteCar> favoriteCars = favoriteCarService.getFavoriteCars(userId);
+
         Integer visitCount = (Integer) session.getAttribute("visitCount");
         if (visitCount == null) {
             visitCount = 0;
@@ -99,6 +159,7 @@ public class ServiceController {
         model.addAttribute("user_id", user.getId());
         model.addAttribute("avatar", user.getAvatar() != null ? user.getAvatar() : "default.jpg");
         model.addAttribute("avatarFilename", user.getAvatar());
+        model.addAttribute("favoriteCars", favoriteCars); 
         
         return "user_accPage";
     }

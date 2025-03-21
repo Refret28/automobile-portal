@@ -13,6 +13,13 @@
     </header>
     <div class="container">
         <h2>Добро пожаловать, <span th:text="${username}"></span>!</h2>
+
+        <div th:if="${message}" class="alert alert-success">
+            <p th:text="${message}"></p>
+        </div>
+        <div th:if="${error}" class="alert alert-danger">
+            <p th:text="${error}"></p>
+        </div>    
         
         <form th:action="@{/user_acc/{userId}/upload(userId=${userId})}" method="post" enctype="multipart/form-data">
             <center><div class="avatar-container">
@@ -34,8 +41,28 @@
             <p><strong>Количество посещений:</strong> <span th:text="${visitCount}"></span></p>
             <p><strong>Текущая дата и время:</strong> <span th:text="${serverTime}"></span></p>
         </div>        
+
+        <div class="favorite-cars-section">
+            <h2>Избранные автомобили</h2>
+            <div th:each="car : ${favoriteCars}">
+                <div class="favorite-car-item" th:id="'car-item-' + ${car.id}">
+                    <h3 th:text="${car.carModel}"></h3>
+                    <center><img th:src="${car.imageUrl}" alt="Изображение автомобиля" style="width: 200px; height: auto;"/></center>
+                    <p th:text="${car.carDetails}"></p>
+                    <form th:action="@{/remove-favorite}" method="post">
+                        <input type="hidden" id="csrf_token" name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="hidden" name="userId" th:value="${user_id}"/> 
+                        <input type="hidden" name="carId" th:value="${car.id}"/> 
+                        <button class="remove-from-favorites" th:data-userid="${user_id}" th:data-carid="${car.id}">Удалить из избранного</button>
+                    </form>
+                </div>
+            </div>
+        </div>     
+
+        <div id="favorite-notification" class="notification"></div>
         
         <a th:href="@{/main(user_id=${user_id})}" class="back-link">Вернуться на главную</a>
     </div>
+    <script type="text/javascript" th:src="@{/js/user_acc.js}" defer></script>
 </body>
 </html>

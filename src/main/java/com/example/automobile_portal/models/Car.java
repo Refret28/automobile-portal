@@ -5,15 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "roles")
 @Getter
 @Setter
-public class Role {
+@Table(name = "cars") 
+public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String name;
-    
+    private String model; 
+    private String details; 
+    private String imageUrl; 
+
 }

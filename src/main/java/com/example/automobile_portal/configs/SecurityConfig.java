@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .requestMatchers("/register").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/moderator/**").hasRole("MODERATOR")
-                .requestMatchers("/main/**").hasRole("USER")
+                .requestMatchers("/main/**", "/add-to-favorites", "/remove-favorite").hasRole("USER")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

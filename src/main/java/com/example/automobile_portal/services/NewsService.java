@@ -16,4 +16,20 @@ public class NewsService {
     public List<News> getAllNews() {
         return newsRepository.findAll();
     }
+
+    public News createNews(News news) {
+        return newsRepository.save(news);
+    }
+
+    public News getNewsById(Long id) {
+        return newsRepository.findById(id).orElse(null);
+    }
+
+    public News updateNews(News news) {
+        return newsRepository.save(news);
+    }
+
+    public void deleteNews(Long id) {
+        newsRepository.deleteById(id);
+    }
 }

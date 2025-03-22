@@ -11,10 +11,64 @@
 <body>
     <div class="container">
         <h1>Панель модератора</h1>
-        <p>Добро пожаловать, модератор!</p>
-        <a href="/moderate-posts" class="btn">Модерация контента</a>
-        <a href="/reports" class="btn">Жалобы пользователей</a>
-        <a href="/logout" class="btn">Выход</a>
+        <a href="/logout" class="btn logout-btn">Выход</a>
+
+        <div class="form-container">
+            <h2>Добавить новость</h2>
+            <form th:action="@{/add-news}" method="post">
+                <input type="text" name="title" placeholder="Заголовок новости" required />
+                <textarea name="content" rows="4" placeholder="Содержание новости" required></textarea>
+                <button type="submit" class="btn add-news">Добавить новость</button>
+            </form>
+        </div>
+
+        <h2>Список новостей</h2>
+        <table>
+            <button type="button" class="btn refresh-btn" onclick="refreshNews()">Обновить список</button>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Заголовок</th>
+                    <th>Содержание</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody id="news-list">
+                <tr th:each="news : ${newsList}">
+                    <td th:text="${news.id}"></td>
+                    <td th:text="${news.title}"></td>
+                    <td th:text="${news.content}"></td>
+                    <td>
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" id="csrf_token"/>
+                        <a th:href="@{/edit-news/{id}(id=${news.id})}" class="btn edit-btn">Редактировать</a>
+                        <form th:action="@{/delete-news}" method="post" style="display:inline;">
+                            <input type="hidden" name="id" th:value="${news.id}" />
+                            <button type="submit" class="btn delete-btn" style="background-color: #dc3545;">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div id="notification" class="notification"></div>
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Редактирование новости</h2>
+                <form id="editForm">
+                    <input type="hidden" id="newsId" name="id"/>
+                    
+                    <label for="editTitle">Заголовок:</label>
+                    <input type="text" id="editTitle" name="title" required />
+        
+                    <label for="editContent">Содержание:</label>
+                    <textarea id="editContent" name="content" rows="4" required></textarea>
+        
+                    <button type="submit" class="btn-new edit-btn">Сохранить изменения</button>
+                </form>
+            </div>
+        </div>        
     </div>
+    <script type="text/javascript" th:src="@{/js/moderator.js}" defer></script>
 </body>
 </html>

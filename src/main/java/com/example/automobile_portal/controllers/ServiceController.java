@@ -131,7 +131,8 @@ public class ServiceController {
 
     @GetMapping("/moderator")
     public String getModeratorPage(Model model) {
-        model.addAttribute("user", new User());
+        List<News> newsList = newsService.getAllNews();
+        model.addAttribute("newsList", newsList);
         return "moderatorPage";
     }
 

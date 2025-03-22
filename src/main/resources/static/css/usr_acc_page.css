@@ -144,13 +144,16 @@ header h1 {
     color: white; 
     border: none;
     padding: 10px 15px; 
-    transition: background-color 0.3s ease; 
+    transition: .2s linear; 
     border-radius: 5px;
     cursor: pointer; 
 }
 
 .remove-from-favorites:hover {
     background-color: #cc0000; 
+    -webkit-transform: rotateZ(5deg);
+    -ms-transform: rotateZ(5deg);
+    transform: rotateZ(5deg);
 }
 
 .notification {

@@ -461,15 +461,16 @@ input[type="datetime-local"] {
     border-radius: 5px; 
     font-size: 16px; 
     cursor: pointer; 
-    transition: background-color 0.3s ease; 
+    transition: .2s linear; 
     display: block; 
     margin: 20px auto; 
     width: 200px; 
     text-align: center;
 }
 
-.add-to-favorites:hover {
+.add-to-favorites:hover{
     background-color: #3e8e41; 
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #3e8e41;
 }
 
 .tab-content {

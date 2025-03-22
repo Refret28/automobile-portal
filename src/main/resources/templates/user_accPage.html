@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <h1>Личный кабинет</h1>
+        <h1 th:onclick="'location.href=\'/user_acc/' + ${user_id} + '\''" style="cursor: pointer;">Личный кабинет</h1>
     </header>
     <div class="container">
         <h2>Добро пожаловать, <span th:text="${username}"></span>!</h2>

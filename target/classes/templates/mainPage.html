@@ -10,7 +10,7 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <h1>Автомобильный портал</h1>
+            <h1 th:onclick="'location.href=\'/main?user_id=' + ${user_id} + '\''" style="cursor: pointer;">Автомобильный портал</h1>
             <div class="hamburger-container">
                 <button class="hamburger" onclick="toggleSidebar()">
                     <div class="middle"></div>
@@ -20,9 +20,9 @@
     </header>   
 
     <div class="tabs">
-        <div class="tab active" onclick="showTab('news')">Новости</div>
-        <div class="tab" onclick="showTab('catalog')">Каталог автомобилей</div>
-    </div>
+        <div class="tab active" data-tab="news" onclick="showTab('news')">Новости</div>
+        <div class="tab" data-tab="catalog" onclick="showTab('catalog')">Каталог автомобилей</div>
+    </div>    
 
     <div class="tab-content active" id="news">
         <h2 class="news">Новости</h2>

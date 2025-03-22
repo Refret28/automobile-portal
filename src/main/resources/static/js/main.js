@@ -65,28 +65,26 @@ function closeSidebar() {
 
 function showTab(tabName) {
     const contents = document.querySelectorAll('.tab-content');
-    contents.forEach(function(content) {
-        content.classList.remove('active'); 
-        content.style.opacity = '0'; 
-        content.style.visibility = 'hidden'; 
-    });
-
     const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(function(tab) {
-        tab.classList.remove('active'); 
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    contents.forEach(content => {
+        content.style.opacity = '0';
+        content.style.visibility = 'hidden';
+        content.style.height = '0';
+        content.classList.remove('active');
     });
 
-    const tabContent = document.getElementById(tabName);
-    if (tabContent) {
-        tabContent.classList.add('active'); 
-        tabContent.style.visibility = 'visible'; 
-        setTimeout(() => {
-            tabContent.style.opacity = '1'; 
-        }, 10); 
-    }
+    document.querySelector(`.tab[data-tab="${tabName}"]`)?.classList.add('active');
 
-    const activeTab = Array.from(tabs).find(tab => tab.textContent.trim().toLowerCase() === tabName.toLowerCase());
-    if (activeTab) {
-        activeTab.classList.add('active'); 
+    const selectedTabContent = document.getElementById(tabName);
+    if (selectedTabContent) {
+        selectedTabContent.classList.add('active');
+        selectedTabContent.style.height = 'auto';
+        selectedTabContent.style.visibility = 'visible';
+        setTimeout(() => {
+            selectedTabContent.style.opacity = '1'; 
+        }, 50);
     }
 }

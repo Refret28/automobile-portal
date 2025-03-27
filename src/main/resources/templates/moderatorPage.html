@@ -3,14 +3,14 @@
 <head xmlns:th="http://www.thymeleaf.org">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель модератора</title>
+    <title>Кабинет модератора</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/moderator.css}">
 </head>
 <body>
     <div class="container">
-        <h1>Панель модератора</h1>
+        <h1>Кабинет модератора</h1>
         <a href="/logout" class="btn logout-btn">Выход</a>
 
         <div class="form-container">
@@ -40,7 +40,7 @@
                     <td th:text="${news.content}"></td>
                     <td>
                         <input type="hidden" name="_csrf" th:value="${_csrf.token}" id="csrf_token"/>
-                        <a th:href="@{/edit-news/{id}(id=${news.id})}" class="btn edit-btn">Редактировать</a>
+                        <a th:href="@{edit-news/{id}(id=${news.id})}" class="btn edit-btn">Редактировать</a>
                         <form th:action="@{/delete-news}" method="post" style="display:inline;">
                             <input type="hidden" name="id" th:value="${news.id}" />
                             <button type="submit" class="btn delete-btn" style="background-color: #dc3545;">Удалить</button>
@@ -69,6 +69,6 @@
             </div>
         </div>        
     </div>
-    <script type="text/javascript" th:src="@{/js/moderator.js}" defer></script>
+    <script type="text/javascript" th:src="@{/js/moderator_page.js}" defer></script>
 </body>
 </html>

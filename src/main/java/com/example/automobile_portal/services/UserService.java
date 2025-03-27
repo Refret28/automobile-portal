@@ -7,8 +7,7 @@ import com.example.automobile_portal.repositories.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,32 +21,33 @@ public class UserService{
     private final UserRepository userRepository; 
     private final RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }
 
-    public List<User> getAllUsers () { 
+    public List<User> getAllUsers() { 
         return userRepository.findAll(); 
     } 
 
-    public User getUserById(Integer id) { 
-        Optional<User> OptionalUser = userRepository.findById(id); 
+    public User getUserById(Integer userId) { 
+        Optional<User> OptionalUser = userRepository.findById(userId); 
         if (OptionalUser.isPresent()) { 
             return OptionalUser.get(); 
         } 
-        log.info( "Пользователь с идентификатором: {} не существует" , id); 
+        log.info( "Пользователь с идентификатором: {} не существует" , userId); 
         return  null ; 
     } 
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден: " + email));
+    }
     
     @Transactional
-    public void saveUser (User user) { 
+    public void saveUser(User user) { 
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         if (user.getRole() == null) {
             Role defaultRole = roleRepository.findByName("USER")
@@ -58,7 +58,7 @@ public class UserService{
         userRepository.save(user);
     }  
 
-    public User updateUser  (User user) { 
+    public User updateUser(User user) { 
         Optional<User> existingUser = userRepository.findById(user.getId());
         user.setCreatedAt(existingUser.get().getCreatedAt());
         user.setUpdatedAt(LocalDateTime.now());
@@ -69,7 +69,7 @@ public class UserService{
         return updatedUser; 
     } 
 
-    public  void  deleteUserById  (Integer id) { 
+    public  void  deleteUserById(Integer id) { 
         userRepository.deleteById(id); 
     } 
 
@@ -85,8 +85,20 @@ public class UserService{
 
     public void updateUserAvatar(int userId, String avatarPath) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+            .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
         user.setAvatar(avatarPath);
         userRepository.save(user);
+    }
+
+    public User updateUserRole(int userId, String role) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+    
+        Role setRole = roleRepository.findByName(role)
+            .orElseThrow(() -> new RuntimeException("Роль " + role + " не найдена в базе данных"));
+    
+        user.setRole(setRole);
+        
+        return userRepository.save(user);
     }
 }

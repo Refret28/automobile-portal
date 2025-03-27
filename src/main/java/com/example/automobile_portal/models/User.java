@@ -46,4 +46,8 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
+    public User(Integer id) {
+        this.id = id;
+    }
+
 }

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать пользователя</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/edit-user.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Редактировать пользователя</h1>
+        <form th:action="@{/edit-user}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="hidden" name="id" th:value="${user.id}"> 
+            
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" th:value="${user.username}" required>
+    
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:value="${user.email}" required>
+    
+            <label for="phone">Телефон:</label>
+            <input type="text" id="phone" name="phone" th:value="${user.phone}" required>
+
+            <center><div class="avatar-container">
+                <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;">
+                <label for="avatarInput" class="avatar-label">
+                    <img th:src="@{${user.avatar}}" alt="Аватар" class="avatar">
+                    <div class="overlay">Изменить</div>
+                </label>
+            </div></center> 
+            
+            <button type="submit">Сохранить изменения</button>
+        </form>
+        
+        <h2>Загруженные файлы</h2>
+        <form th:action="@{/user_acc/delete-files}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <table>
+                <tr>
+                    <th>Файл</th>
+                    <th>Действие</th>
+                </tr>
+                <tr th:if="${files != null and not #lists.isEmpty(files)}" th:each="file : ${files}">
+                    <td>
+                        <a th:href="@{/uploads/files/files_{username}/{filename}(username=${user.username}, filename=${file.filename})}" 
+                           th:text="${file.filename}" target="_blank"></a>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="deleteFiles" th:value="${file.id}"> Пометить на удаление
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Удалить выбранные файлы</button>
+        </form>
+        
+        <a class="back-link" href="/admin">Вернуться в кабинет</a>
+    </div>
+    <script type="text/javascript" th:src="@{/js/edit_user.js}" defer></script>
+</body>
+</html>

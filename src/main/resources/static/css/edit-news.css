@@ -1,0 +1,87 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    margin-top: 10px; 
+    font-weight: bold; 
+    display: block; 
+}
+
+input[type="text"], textarea {
+    width: calc(100% - 22px); 
+    padding: 10px; 
+    line-height: 1.5;
+    margin: 10px 0; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    font-family: 'Montserrat', sans-serif; 
+    font-size: medium;
+    color: #333;
+}
+
+textarea {
+    height: 20rem;
+}
+
+@keyframes slideme {
+    0% {
+        left: -30px;
+        margin-left: 0px;
+    }
+    30% {
+        left: 110%;
+        margin-left: 80px;
+    }
+    100% {
+        left: 110%;
+        margin-left: 80px;
+    }
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    transition: .2s linear;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #28a745;
+}
+
+.back-link {
+    display: inline-block;
+    margin: 20px 0;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}

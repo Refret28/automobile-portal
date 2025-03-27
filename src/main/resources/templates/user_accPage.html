@@ -21,17 +21,18 @@
             <p th:text="${error}"></p>
         </div>    
         
-        <form th:action="@{/user_acc/{userId}/upload(userId=${userId})}" method="post" enctype="multipart/form-data">
-            <center><div class="avatar-container">
-                <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;" onchange="this.form.submit()">
-                <label for="avatarInput" class="avatar-label">
-                    <img th:src="@{${avatarFilename}}" alt="Аватар" class="avatar">
-                    <div class="overlay">Изменить</div>
-                </label>
-            </div></center>
+        <form th:action="@{/user_acc/{userId}/upload(userId=${userId})}" method="post" enctype="multipart/form-data" id="avatarForm">
+            <center>
+                <div class="avatar-container">
+                    <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;">
+                    <label for="avatarInput" class="avatar-label">
+                        <img th:src="@{${avatarFilename}}" alt="Аватар" class="avatar">
+                        <div class="overlay">Изменить</div>
+                    </label>
+                </div>
+            </center>
         </form>
 
-             
         <div class="user-info">
             <h3>Ваша информация:</h3>
             <p><strong>Имя пользователя:</strong> <span th:text="${username}"></span></p>
@@ -41,6 +42,29 @@
             <p><strong>Количество посещений:</strong> <span th:text="${visitCount}"></span></p>
             <p><strong>Текущая дата и время:</strong> <span th:text="${serverTime}"></span></p>
         </div>        
+
+        <form th:action="@{/user_acc/files/upload-file}" method="post" enctype="multipart/form-data" id="fileUploadForm">
+            <input type="file" id="fileInput" name="file" required style="display: none;" onchange="updateFileName()">
+            <button type="button" class="btn" onclick="document.getElementById('fileInput').click();">Выберите файл</button>
+            <span id="fileName">Нет выбранного файла</span>
+            <button type="submit" class="btn">Загрузить файл</button>
+        </form>
+
+        <h2>Загруженные файлы</h2>
+
+        <form>
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        </form>
+        
+        <ul id="fileList">
+            <li th:each="file : ${userFiles}">
+                <a th:href="@{/files/download/{filename}(filename=${file})}" th:text="${file}" download></a>
+            </li>
+        </ul>       
+
+        <p th:if="${userFiles == null or #lists.isEmpty(userFiles)}" class="no-files">Нет загруженных файлов</p>
+        
+        <p id="uploadStatus"></p>
 
         <div class="favorite-cars-section">
             <h2>Избранные автомобили</h2>
@@ -57,6 +81,9 @@
                     </form>
                 </div>
             </div>
+            <tr th:if="${favoriteCars == null or #lists.isEmpty(favoriteCars)}">
+                <p colspan="2" class="no-favorites">Нет избранных автомобилей</p>
+            </tr>
         </div>     
 
         <div id="favorite-notification" class="notification"></div>

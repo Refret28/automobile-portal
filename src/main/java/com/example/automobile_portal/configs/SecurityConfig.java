@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -16,6 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.example.automobile_portal.services.CustomUserDetailsService;
 
+@SuppressWarnings("deprecation")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -49,14 +52,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,  CustomAuthenticationSuccessHandler successHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomAuthenticationSuccessHandler successHandler) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/register").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/moderator/**").hasRole("MODERATOR")
-                .requestMatchers("/main/**", "/add-to-favorites", "/remove-favorite").hasRole("USER")
-                .anyRequest().authenticated()
+                .requestMatchers("/register", "/css/**", "/js/**", "/images/**").permitAll() 
+                .requestMatchers("/admin/**").hasRole("ADMIN") 
+                .requestMatchers("/update-user").hasRole("ADMIN")
+                .requestMatchers("/moderator/**").hasRole("MODERATOR") 
+            
+                .requestMatchers("/add-news", "/edit-news/**", "/delete-news").hasAnyRole("MODERATOR", "ADMIN") 
+                .requestMatchers("/main/**", "/add-to-favorites", "/remove-favorite", "/files/delete/**", "/uploads/**").hasRole("USER") 
+                .anyRequest().authenticated() 
             )
             .formLogin(form -> form
                 .loginPage("/login")
@@ -65,15 +71,15 @@ public class SecurityConfig {
                 .passwordParameter("password")
                 .failureUrl("/login?error=true")
                 .successHandler(successHandler)
-                .permitAll()
+                .permitAll() 
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/login") 
                 .permitAll()
             );
-
+    
         return http.build();
-    }
+    }    
 
 }

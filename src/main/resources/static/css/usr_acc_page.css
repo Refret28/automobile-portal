@@ -177,3 +177,29 @@ header h1 {
     display: block;
     opacity: 1;
 }
+
+.no-files, .no-favorites {
+    font-size: 18px;
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    background: #333;
+    box-shadow: 0 5px 0 #0b001d;
+    width: 150px;
+    height: 40px;
+}
+
+.btn:hover {
+    background: #888;
+    box-shadow: none;
+    position: relative;
+    top: 5px;
+}
+
+#fileList li {
+    margin-bottom: 20px; 
+}

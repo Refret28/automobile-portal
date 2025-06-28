@@ -1,6 +1,6 @@
-# Connecting to a database
+# Подключение к базе данных
 
-To connect to the database, you need to replace these connection parameters with the actual values ​​in the application.properties file:
+Чтобы подключиться к базе данных, необходимо заменить эти параметры подключения на фактические значения в файле `application.properties`:
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/your_database
 spring.datasource.username=your_username
